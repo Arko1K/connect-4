@@ -6,5 +6,6 @@ public enum MessageType {
     START,
     LOCKED,
     MOVE,
-    END
+    END,
+    INVALID
 }

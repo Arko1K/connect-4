@@ -8,6 +8,7 @@ import common.Constants;
 import common.RedisUtils;
 import models.MessageType;
 import models.entities.GameMessage;
+import org.apache.commons.lang3.StringUtils;
 import redis.clients.jedis.JedisPubSub;
 
 /**
@@ -91,13 +92,20 @@ public class GameActor extends UntypedActor {
         if (message instanceof String) {
             // A player cannot make a move until the game has started
             if (started) {
-                short column = Short.valueOf((String) message);
-                GameMessage gameMessage = gameListener.onMove(column);
+                String messageString = (String) message;
 
-                if (!gameMessage.getType().equals(MessageType.LOCKED))
-                    RedisUtils.publish(gameId, gameMessage.toString());
-                else // If the game is locked then tell the client directly instead of publishing the message to the channel
-                    out.tell(gameMessage.toString(), self());
+                // Validation
+                if (StringUtils.isNumeric(messageString)) {
+
+                    short column = Short.valueOf(messageString);
+                    GameMessage gameMessage = gameListener.onMove(column);
+
+                    if (!gameMessage.getType().equals(MessageType.LOCKED))
+                        RedisUtils.publish(gameId, gameMessage.toString());
+                    else // If the game is locked then tell the client directly instead of publishing the message to the channel
+                        out.tell(gameMessage.toString(), self());
+                } else
+                    out.tell(new GameMessage(MessageType.INVALID, disc, null).toString(), self());
             } else
                 out.tell(new GameMessage(MessageType.LOCKED, disc, Constants.MESSAGE_GAME_WAITING).toString(), self());
         }
