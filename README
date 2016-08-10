@@ -2,3 +2,5 @@ Connect-4
 =================================
 
 Simple Connect-4 game built with WebSockets in Play framework.
+
+Uses Redis for storing volatile data and Pub/Sub, and MongoDB for storing the game.
