@@ -1,5 +1,4 @@
-**Connect-4**
-=================================
+# Connect-4
 
 Simple Connect-4 game built with WebSockets in Play framework.
 
