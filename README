@@ -1,6 +1,20 @@
-Connect-4
+**Connect-4**
 =================================
 
 Simple Connect-4 game built with WebSockets in Play framework.
 
 Uses Redis for storing volatile data and Pub/Sub, and MongoDB for storing the game.
+
+
+Endpoints
+=================================
+
+GET        /game/new
+Get WebSocket for a new game.
+
+GET        /game/join
+Get WebSocket for an open game where a player is waiting
+
+GET        /game?gameId=57aa9282fea4643d9661ef2f&discId=1
+Get WebSocket for an existing game with game with a gameId and a disc that isn't being used by another player.
+This is useful for reconnecting with a game that was interrupted.
